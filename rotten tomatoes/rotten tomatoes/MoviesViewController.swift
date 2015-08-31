@@ -12,10 +12,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var tableView: UITableView!
     
     var movies: [NSDictionary]?
+    var refreshControl: UIRefreshControl!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    func refresh(sender:AnyObject) {
         let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apiKey=dagqdghwaq3e3mxyrp7kmmj5&limit=20&country=us")!
         let request = NSURLRequest(URL: url)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()){ (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
@@ -23,11 +22,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             if let json = json{
                 self.movies = json["movies"] as? [NSDictionary]
                 self.tableView.reloadData()
+                
             }else {
                 
             }
+            self.refreshControl.endRefreshing()
         }
         
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.addSubview(refreshControl)
+        refresh(self)
         tableView.dataSource = self
         tableView.delegate = self
 
@@ -55,22 +66,33 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = movies![indexPath.row]
         cell.titleLabel.text = movie["title"] as? String
         cell.synopsisLabel.text = movie["synopsis"] as? String
-        let url = NSURL(string: movie.valueForKeyPath("posters.thumbnail") as! String!)
-        
-        
+        var urlString = movie.valueForKeyPath("posters.thumbnail") as! String!
+        var range = urlString.rangeOfString(".*cloudfront.net/", options: .RegularExpressionSearch)
+        if let range = range {
+            urlString = urlString.stringByReplacingCharactersInRange(range, withString: "https://content6.flixster.com/")
+        }
+        let url = NSURL(string: urlString)!
+        cell.posterView.setImageWithURL(url)
+    
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated:true)
     }
 
     
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        var vc = segue.destinationViewController as? MovieDetailsViewController
+        var indexPath = tableView.indexPathForCell(sender as! MovieTableViewCell)
+        
+        let movie = movies![indexPath!.row]
+        vc?.movie = movie
     }
-    */
 
 }
