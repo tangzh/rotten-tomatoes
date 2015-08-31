@@ -73,13 +73,25 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.titleLabel.text = movie["title"] as? String
         cell.synopsisLabel.text = movie["synopsis"] as? String
         var urlString = movie.valueForKeyPath("posters.thumbnail") as! String!
-        var range = urlString.rangeOfString(".*cloudfront.net/", options: .RegularExpressionSearch)
-        if let range = range {
-            urlString = urlString.stringByReplacingCharactersInRange(range, withString: "https://content6.flixster.com/")
-        }
-        let url = NSURL(string: urlString)!
-        cell.posterView.setImageWithURL(url)
-    
+        let lowFiImageUrl = NSURL(string: urlString)!
+        
+        cell.posterView.setImageWithURLRequest(NSURLRequest(URL: lowFiImageUrl), placeholderImage: nil, success: {
+            (request: NSURLRequest, response:NSHTTPURLResponse!, image: UIImage!) -> Void in
+                if let image = image {
+                    cell.posterView.image = image
+                    var range = urlString.rangeOfString(".*cloudfront.net/", options: .RegularExpressionSearch)
+                    if let range = range {
+                        urlString = urlString.stringByReplacingCharactersInRange(range, withString: "https://content6.flixster.com/")
+                    }
+                    let url = NSURL(string: urlString)!
+                    cell.posterView.setImageWithURL(url)
+                }
+            }, failure: {
+                (request:NSURLRequest!,response:NSHTTPURLResponse!, error:NSError!) -> Void in
+                println(error)
+                
+        })
+
         return cell
     }
     

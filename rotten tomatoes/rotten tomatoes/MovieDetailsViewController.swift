@@ -21,13 +21,25 @@ class MovieDetailsViewController: UIViewController {
             titleLabel.text = movie["title"] as? String
             synopsisLabel.text = movie["synopsis"] as? String
             var urlString = movie.valueForKeyPath("posters.thumbnail") as! String!
-            var range = urlString.rangeOfString(".*cloudfront.net/", options: .RegularExpressionSearch)
-            if let range = range {
-                urlString = urlString.stringByReplacingCharactersInRange(range, withString: "https://content6.flixster.com/")
-            }
-            let url = NSURL(string: urlString)!
+            let lowFiImageUrl = NSURL(string: urlString)!
             
-            imageView.setImageWithURL(url)            
+            imageView.setImageWithURLRequest(NSURLRequest(URL: lowFiImageUrl), placeholderImage: nil, success: {
+                (request: NSURLRequest, response:NSHTTPURLResponse!, image: UIImage!) -> Void in
+                    if let image = image {
+                        self.imageView.image = image
+                        var range = urlString.rangeOfString(".*cloudfront.net/", options: .RegularExpressionSearch)
+                        if let range = range {
+                            urlString = urlString.stringByReplacingCharactersInRange(range, withString: "https://content6.flixster.com/")
+                        }
+                    }
+                }, failure: {
+                    (request:NSURLRequest!,response:NSHTTPURLResponse!, error:NSError!) -> Void in
+                    println(error)
+                    
+            })
+            
+            let url = NSURL(string: urlString)!
+            imageView.setImageWithURL(url)
         }
 
         // Do any additional setup after loading the view.
