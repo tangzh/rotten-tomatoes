@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>JGProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-rotten tomatoes.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -17,12 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>426337717A1D0BD73A02F1B41A706BA5</key>
+		<key>0BC4492492F7079B6F54ED6DB26339CB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>86819E68B1664CDE6ED84B3F9ED9516E</key>
+		<key>A2529223B0C3D7F6EFF777FA4F188A78</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>ECA84E789B770C6BF363268F241F0342</key>
 		<dict>
 			<key>primary</key>
 			<true/>

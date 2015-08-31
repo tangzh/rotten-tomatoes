@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--Movies View Controller-->
+        <!--Movies-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="MoviesViewController" customModule="rotten_tomatoes" customModuleProvider="target" sceneMemberID="viewController">
@@ -13,24 +13,30 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="128" sectionHeaderHeight="22" sectionFooterHeight="22" id="BYW-BT-RiK">
-                                <rect key="frame" x="5" y="20" width="320" height="568"/>
+                                <rect key="frame" x="5" y="0.0" width="320" height="588"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <view key="tableHeaderView" hidden="YES" contentMode="scaleToFill" id="gtI-KJ-GAi">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Network Error!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LPT-X6-azY">
+                                            <rect key="frame" x="0.0" y="8" width="301" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </view>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MovieCell" rowHeight="128" id="NzR-yp-eLG" customClass="MovieTableViewCell" customModule="rotten_tomatoes" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="86" width="320" height="128"/>
+                                        <rect key="frame" x="0.0" y="130" width="320" height="128"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NzR-yp-eLG" id="HYH-eZ-hg3">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="127.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5dl-cq-QU7">
-                                                    <rect key="frame" x="97" y="8" width="215" height="27"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="bbm-s3-Wi0">
                                                     <rect key="frame" x="-21" y="8" width="110" height="111.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -39,6 +45,13 @@
                                                     <rect key="frame" x="97" y="37" width="215" height="82.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5dl-cq-QU7">
+                                                    <rect key="frame" x="97" y="8" width="215" height="27"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -56,8 +69,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="FTx-xh-N9v"/>
+                    <navigationItem key="navigationItem" title="Movies" id="FTx-xh-N9v"/>
                     <connections>
+                        <outlet property="networkErrView" destination="gtI-KJ-GAi" id="f4m-0q-Wwj"/>
                         <outlet property="tableView" destination="BYW-BT-RiK" id="HZ4-G6-EqD"/>
                     </connections>
                 </viewController>
@@ -65,7 +79,7 @@
             </objects>
             <point key="canvasLocation" x="734" y="288"/>
         </scene>
-        <!--Movie Details View Controller-->
+        <!--Detail-->
         <scene sceneID="c4N-wV-JJP">
             <objects>
                 <viewController id="Rof-xe-lmF" customClass="MovieDetailsViewController" customModule="rotten_tomatoes" customModuleProvider="target" sceneMemberID="viewController">
@@ -101,7 +115,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="wLu-Jx-3D5"/>
+                    <navigationItem key="navigationItem" title="Detail" id="wLu-Jx-3D5"/>
                     <connections>
                         <outlet property="imageView" destination="7nl-QZ-Tga" id="gqx-Ah-rBb"/>
                         <outlet property="synopsisLabel" destination="Kc6-x1-6IE" id="G8T-UO-Q6D"/>

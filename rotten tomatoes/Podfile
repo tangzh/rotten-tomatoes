@@ -3,6 +3,7 @@
 
 target 'rotten tomatoes' do
   pod "AFNetworking"
+  pod "JGProgressHUD"
 end
 
 target 'rotten tomatoesTests' do

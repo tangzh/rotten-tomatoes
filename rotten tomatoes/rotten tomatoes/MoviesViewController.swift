@@ -10,30 +10,42 @@ import UIKit
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var networkErrView: UIView!
     
     var movies: [NSDictionary]?
     var refreshControl: UIRefreshControl!
+    var hud: JGProgressHUD!
     
     func refresh(sender:AnyObject) {
-        let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apiKey=dagqdghwaq3e3mxyrp7kmmj5&limit=20&country=us")!
+        
+        let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apiKey=dagqdghwaq3e3mxyrp7kmmj5&limit=50&country=us")!
         let request = NSURLRequest(URL: url)
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()){ (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary
-            if let json = json{
-                self.movies = json["movies"] as? [NSDictionary]
-                self.tableView.reloadData()
-                
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()){ (response: NSURLResponse?, data: NSData!, error: NSError!) -> Void in
+            if let response = response {
+                let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary
+                if let json = json{
+                    self.movies = json["movies"] as? [NSDictionary]
+                    self.tableView.reloadData()
+                    self.networkErrView.hidden = true
+                }else {
+                }
             }else {
-                
+               self.networkErrView.hidden = false
             }
             self.refreshControl.endRefreshing()
+            self.hud.indicatorView.setProgress(1.0, animated: true)
+            self.hud.dismiss()
         }
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        hud = JGProgressHUD(style: JGProgressHUDStyle.Dark)
+        hud.textLabel.text = "loading"
+        hud.indicatorView = JGProgressHUDPieIndicatorView(HUDStyle: hud.style)
+        hud.showInView(self.view)
+        hud.indicatorView.setProgress(0.0, animated: true)
+
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
@@ -72,8 +84,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             urlString = urlString.stringByReplacingCharactersInRange(range, withString: "https://content6.flixster.com/")
         }
         let url = NSURL(string: urlString)!
+//        let imageHud = JGProgressHUD(style: JGProgressHUDStyle.ExtraLight)
+//        imageHud.showInView(cell.posterView)
+        
         cell.posterView.setImageWithURL(url)
     
+//        imageHud.dismiss()
         return cell
     }
     
