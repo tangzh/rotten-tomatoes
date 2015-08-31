@@ -17,8 +17,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var hud: JGProgressHUD!
     
     func refresh(sender:AnyObject) {
-        println("enter refresh")
-        
         let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apiKey=dagqdghwaq3e3mxyrp7kmmj5&limit=20&country=us")!
         let request = NSURLRequest(URL: url)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()){ (response: NSURLResponse?, data: NSData!, error: NSError!) -> Void in
@@ -34,7 +32,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                self.networkErrView.hidden = false
                self.networkErrView.layer.zPosition = 10
             }
-            println("end refresh")
             self.refreshControl.endRefreshing()
             self.hud.indicatorView.setProgress(1.0, animated: true)
             self.hud.dismiss()
