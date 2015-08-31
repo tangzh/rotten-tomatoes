@@ -78,7 +78,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.posterView.setImageWithURLRequest(NSURLRequest(URL: lowFiImageUrl), placeholderImage: nil, success: {
             (request: NSURLRequest, response:NSHTTPURLResponse!, image: UIImage!) -> Void in
                 if let image = image {
-                    cell.posterView.image = image
+                    UIView.transitionWithView(cell.posterView, duration: 0.5, options: .TransitionCrossDissolve, animations: {
+                        cell.posterView.image = image
+                    }, completion: nil)
                     var range = urlString.rangeOfString(".*cloudfront.net/", options: .RegularExpressionSearch)
                     if let range = range {
                         urlString = urlString.stringByReplacingCharactersInRange(range, withString: "https://content6.flixster.com/")
