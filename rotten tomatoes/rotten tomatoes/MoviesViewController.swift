@@ -17,8 +17,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var hud: JGProgressHUD!
     
     func refresh(sender:AnyObject) {
+        println("enter refresh")
         
-        let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apiKey=dagqdghwaq3e3mxyrp7kmmj5&limit=50&country=us")!
+        let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apiKey=dagqdghwaq3e3mxyrp7kmmj5&limit=20&country=us")!
         let request = NSURLRequest(URL: url)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()){ (response: NSURLResponse?, data: NSData!, error: NSError!) -> Void in
             if let response = response {
@@ -31,7 +32,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 }
             }else {
                self.networkErrView.hidden = false
+               self.networkErrView.layer.zPosition = 10
             }
+            println("end refresh")
             self.refreshControl.endRefreshing()
             self.hud.indicatorView.setProgress(1.0, animated: true)
             self.hud.dismiss()
@@ -53,13 +56,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         refresh(self)
         tableView.dataSource = self
         tableView.delegate = self
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -69,9 +69,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             return 0
         }
     }
-    
-    // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
-    // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         var cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieTableViewCell
@@ -84,12 +81,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             urlString = urlString.stringByReplacingCharactersInRange(range, withString: "https://content6.flixster.com/")
         }
         let url = NSURL(string: urlString)!
-//        let imageHud = JGProgressHUD(style: JGProgressHUDStyle.ExtraLight)
-//        imageHud.showInView(cell.posterView)
-        
         cell.posterView.setImageWithURL(url)
     
-//        imageHud.dismiss()
         return cell
     }
     
