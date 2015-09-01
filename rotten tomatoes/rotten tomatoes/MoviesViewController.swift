@@ -25,9 +25,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 if let json = json{
                     self.movies = json["movies"] as? [NSDictionary]
                     self.tableView.reloadData()
-                    self.networkErrView.hidden = true
-                }else {
+                    
                 }
+                self.networkErrView.hidden = true
             }else {
                self.networkErrView.hidden = false
                self.networkErrView.layer.zPosition = 10
